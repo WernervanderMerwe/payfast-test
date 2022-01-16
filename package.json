@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "tailwindcss": "^3.0.11"
+  },
+  "dependencies": {
+    "autoprefixer": "^10.4.1",
+    "postcss-cli": "^9.1.0"
+  }
+}

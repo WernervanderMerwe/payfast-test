@@ -23,25 +23,25 @@ homeBtn.addEventListener('click', function () {
 // setout timer to close dropdown
 catDropdownBtnEl.addEventListener('click', function () {
   dropdownFunction();
-  view.renderBothCategoriesPage(model.categoryData);
+  view.renderBothCategoriesPage(model.categoryData, 'All Products');
 });
 
 mensCatBtn.addEventListener('click', function () {
   // move this to view in a render function
-  view.renderCategoryPage(model.categoryData[0]);
+  view.renderCategoryPage(model.categoryData, "Men's");
 });
 
 womensCatBtn.addEventListener('click', function () {
   // move this to view in a render function
-  view.renderCategoryPage(model.categoryData[1]);
+  view.renderCategoryPage(model.categoryData, "Women's");
 });
 
 const controlMensCatBtn = function () {
-  view.renderCategoryPage(model.categoryData[0]);
+  view.renderCategoryPage(model.categoryData, "Men's");
 };
 
 const controlWomensCatBtn = function () {
-  view.renderCategoryPage(model.categoryData[1]);
+  view.renderCategoryPage(model.categoryData, "Women's");
 };
 
 const init = function () {
@@ -52,13 +52,7 @@ const init = function () {
 
 init();
 
-// view.test();
-// view.clear();
-
-// view.renderCategoryPage(model.categoryData[0]);
-// view.renderCategoryPage(model.categoryData[1]);
-
-// view.renderBothCategoriesPage(model.categoryData);
+view.renderPayFastForm();
 
 window.onclick = function (event) {
   if (catDropdownEl.matches('.hidden')) return;

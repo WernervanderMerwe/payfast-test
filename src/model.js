@@ -1,13 +1,33 @@
 const params = new URLSearchParams({
-  merchant_id: '',
-  merchant_key: '',
-  amount: '',
-  passphrase: '',
+  merchant_id: '10024906',
+  merchant_key: '0elf9cy9yzqs7',
+  amount: '650',
+  passphrase: 'bullzeyegranny',
 });
+
+// const MD5Signature = md5(params.toString());
+
+// let currentDate;
+
+// currentDate = new Date();
+// const currentISODate = currentDate.toISOString();
+
+// console.log(currentDate, currentISODate);
 
 const api = async function () {
   try {
-    const response = await fetch('https://api.payfast.co.za/ping');
+    const response = await fetch('https://sandbox.payfast.co.za/eng/process', {
+      method: 'GET',
+      headers: {
+        merchant_id: '10024906',
+        merchant_key: '0elf9cy9yzqs7',
+        amount: '650',
+        item_name: 'Creme hoody',
+        version: 'v1',
+        timestamp: ``,
+        signature: 'fb5521d086eb66ce99898726ee984d64',
+      },
+    });
     // const response = await fetch("https://www.payfast.co.za/eng/process", {
     //   method: "POST", {
     //     merchant_id: '',
@@ -18,6 +38,7 @@ const api = async function () {
     // });
     //  Read fetch api mdn to continue
     const apiData = await response.json();
+    console.log(apiData);
 
     return apiData;
   } catch (err) {
@@ -30,42 +51,35 @@ const api = async function () {
 // Object.keys is another way of handling the data for map()
 export const categoryData = [
   {
+    id: 1,
     heading: "Men's Wear",
-    img1Url: '/img/men hoody product yellow.jpg',
-    img2Url: '/img/men hoody product creme.jpg',
-    cost1: '600',
-    cost2: '650',
-    alt: "Men's Hoody Product",
-  },
-  {
-    heading: "Women's Wear",
-    img1Url: '/img/womans hoody product black.jpg',
-    img2Url: '/img/womans hoody product white.jpg',
-    cost1: '500',
-    cost2: '550',
-    alt: "Women's Hoody Product",
-  },
-
-  /* change the object to look something like this
-    mens: [{
-    heading: "Men's Wear",
+    category: "Men's",
     imgUrl: '/img/men hoody product yellow.jpg',
     cost: '600',
     alt: "Men's Hoody Product",
   },
   {
+    id: 2,
     heading: "Men's Wear",
+    category: "Men's",
     imgUrl: '/img/men hoody product creme.jpg',
     cost: '650',
     alt: "Men's Hoody Product",
-  }],
-  womens: {
+  },
+  {
+    id: 3,
     heading: "Women's Wear",
-    img1Url: '/img/womans hoody product black.jpg',
-    img2Url: '/img/womans hoody product white.jpg',
-    cost1: '500',
-    cost2: '550',
+    category: "Women's",
+    imgUrl: '/img/womans hoody product black.jpg',
+    cost: '500',
     alt: "Women's Hoody Product",
   },
-  */
+  {
+    id: 4,
+    heading: "Women's Wear",
+    category: "Women's",
+    imgUrl: '/img/womans hoody product white.jpg',
+    cost: '550',
+    alt: "Women's Hoody Product",
+  },
 ];

@@ -1,3 +1,5 @@
+import { categoryData } from './model.js';
+
 class View {
   _parentElement = document.querySelector('.mainContainer');
   _mensHomeBtn;
@@ -54,34 +56,35 @@ class View {
     this._womensHomeBtn.addEventListener('click', handler);
   }
 
-  renderCategoryPage(data) {
-    // make heading Clickable
+  renderCategoryPage(data, category) {
+    console.log(data, category);
+
+    const newData = data.filter(prods => prods.category === category);
+    console.log(newData);
     const markup = `
       <div class="categoryPage">
         <div>
-          <h1 class=" text-2xl font-bold m-4">${data.heading}</h1>
+          <h1 class=" text-2xl font-bold m-4">${category} Wear</h1>
           <div class=" flex h-96 gap-4 m-4">
-          
+
+            ${newData
+              .map(
+                product => `
             <div class=" flex relative group">
               <img 
-              src="${data.img1Url}" 
-              alt="${data.alt}"
+              src="${product.imgUrl}" 
+              alt="${product.alt}"
               class=" group-hover:blur-sm group-hover:grayscale"/>
-              <p class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2  text-white opacity-0 group-hover:opacity-100">
-                R ${data.cost1}
-              </p>
-            </div>
 
-            <div class=" flex relative group">
-              <img 
-              src="${data.img2Url}" 
-              alt="${data.alt}"
-              class=" group-hover:blur-sm group-hover:grayscale"/>
               <p class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2  text-white opacity-0 group-hover:opacity-100">
-                R ${data.cost2}
-              </p>
-            </div>
+              R ${product.cost}
+            </p>
 
+            </div>
+            `
+              )
+              .join('')}
+              
           </div>
         </div>
       </div>
@@ -92,10 +95,59 @@ class View {
     return markup;
   }
 
-  renderBothCategoriesPage(data) {
-    const markup = data
-      .map(category => this.renderCategoryPage(category))
-      .join('');
+  renderBothCategoriesPage(data, category) {
+    // const markup = data
+    //   .map((cat, _, arr) => this.renderCategoryPage(cat, category))
+    //   .join('');
+
+    const newData = data;
+
+    const markup = `
+      <div class="categoryPage">
+
+        <div>
+          <h1 class=" text-2xl font-bold m-4">${category}</h1>
+          <div class=" flex h-96 gap-4 m-4">
+
+            ${newData
+              .map(
+                product => `
+            <div class=" flex relative group">
+              <img 
+              src="${product.imgUrl}" 
+              alt="${product.alt}"
+              class=" group-hover:blur-sm group-hover:grayscale"/>
+                    
+              <p class="absolute flex left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2  text-white opacity-0 group-hover:opacity-100 text-center">
+              ${product.category} 
+              R ${product.cost}
+            </p>
+        
+            </div>
+            `
+              )
+              .join('')}
+              
+          </div>
+        </div>
+
+      </div>
+    `;
+
+    this.clear();
+    this._parentElement.insertAdjacentHTML('afterbegin', markup);
+  }
+
+  renderPayFastForm() {
+    const markup = `
+      <form action="https://sandbox.payfast.co.za/eng/process" method="post">
+        <input type="hidden" name="merchant_id" value="10024906">
+        <input type="hidden" name="merchant_key" value="0elf9cy9yzqs7">
+        <input type="hidden" name="amount" value="${categoryData[0].cost}">
+        <input type="hidden" name="item_name" value="${categoryData[0].alt}">
+        <input type="submit" value="Pay Now" class="border bg-black text-white hover:cursor-pointer">
+      </form> 
+    `;
 
     this.clear();
     this._parentElement.insertAdjacentHTML('afterbegin', markup);

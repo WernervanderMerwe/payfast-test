@@ -49,12 +49,14 @@ const api = async function () {
 
 // Usually this info comes from a backend, I might write a promise for this
 // Object.keys is another way of handling the data for map()
+// when I have time Ill parse the url from the imgurl part and print that to the product so that also happens programatically
 export const categoryData = [
   {
     id: 1,
     heading: "Men's Wear",
     category: "Men's",
     imgUrl: '/img/men hoody product yellow.jpg',
+    product: 'men hoody product yellow',
     cost: '600',
     alt: "Men's Hoody Product",
   },
@@ -63,6 +65,7 @@ export const categoryData = [
     heading: "Men's Wear",
     category: "Men's",
     imgUrl: '/img/men hoody product creme.jpg',
+    product: 'men hoody product creme',
     cost: '650',
     alt: "Men's Hoody Product",
   },
@@ -71,6 +74,7 @@ export const categoryData = [
     heading: "Women's Wear",
     category: "Women's",
     imgUrl: '/img/womans hoody product black.jpg',
+    product: 'womans hoody product black',
     cost: '500',
     alt: "Women's Hoody Product",
   },
@@ -79,6 +83,7 @@ export const categoryData = [
     heading: "Women's Wear",
     category: "Women's",
     imgUrl: '/img/womans hoody product white.jpg',
+    product: 'womans hoody product white',
     cost: '550',
     alt: "Women's Hoody Product",
   },

@@ -6,6 +6,9 @@ class View {
   _womensHomeBtn;
   _data;
 
+  centerDivMarkup =
+    'absolute flex left-1/2 top-1/2 -translate-x-1/2 text-white opacity-0 group-hover:opacity-100 text-center';
+
   test() {
     return console.log(this._parentElement);
   }
@@ -77,8 +80,19 @@ class View {
               class=" group-hover:blur-sm group-hover:grayscale"/>
 
               <p class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2  text-white opacity-0 group-hover:opacity-100">
-              R ${product.cost}
-            </p>
+                R${product.cost}
+              </p>
+
+              <form action="https://sandbox.payfast.co.za/eng/process" method="post">
+              <input type="hidden" name="merchant_id" value="10024906">
+              <input type="hidden" name="merchant_key" value="0elf9cy9yzqs7">
+              <input type="hidden" name="amount" value="${product.cost}">
+              <input type="hidden" name="item_name" value="${product.product}">
+              <input 
+              type="submit" 
+              value="Buy Now" 
+              class="${this.centerDivMarkup} translate-y-5 px-2 rounded-full bg-red-600 text-white hover:cursor-pointer">
+            </form>
 
             </div>
             `
@@ -96,6 +110,7 @@ class View {
   }
 
   renderBothCategoriesPage(data, category) {
+    // Keeping the old logic for future reference
     // const markup = data
     //   .map((cat, _, arr) => this.renderCategoryPage(cat, category))
     //   .join('');
@@ -118,10 +133,21 @@ class View {
               alt="${product.alt}"
               class=" group-hover:blur-sm group-hover:grayscale"/>
                     
-              <p class="absolute flex left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2  text-white opacity-0 group-hover:opacity-100 text-center">
-              ${product.category} 
-              R ${product.cost}
-            </p>
+              <p class="${this.centerDivMarkup} -translate-y-1/2">
+                ${product.category} 
+                R${product.cost}
+              </p>
+
+              <form action="https://sandbox.payfast.co.za/eng/process" method="post">
+                <input type="hidden" name="merchant_id" value="10024906">
+                <input type="hidden" name="merchant_key" value="0elf9cy9yzqs7">
+                <input type="hidden" name="amount" value="${product.cost}">
+                <input type="hidden" name="item_name" value="${product.product}">
+                <input 
+                type="submit" 
+                value="Buy Now" 
+                class="${this.centerDivMarkup} translate-y-5 border px-2 rounded-full bg-red-600 text-white hover:cursor-pointer">
+              </form>
         
             </div>
             `

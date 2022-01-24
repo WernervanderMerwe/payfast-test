@@ -1,38 +1,29 @@
 import * as model from './model.js';
 import view from './view.js';
 
-const catDropdownEl = document.querySelector('.categoryDropdown');
-const catDropdownBtnEl = document.querySelector('.categoryDropdownBtn');
 const homeBtn = document.querySelector('.homeBtn');
+const catDropdownBtnEl = document.querySelector('.categoryDropdownBtn');
 const mensCatBtn = document.querySelector('.mensCatBtn');
 const womensCatBtn = document.querySelector('.womensCatBtn');
-
-const dropdownFunction = function () {
-  catDropdownEl.classList.toggle('hidden');
-  ['rounded-full', 'hover:bg-gray-200', 'bg-gray-200'].forEach(attribute =>
-    catDropdownBtnEl.classList.toggle(attribute)
-  );
-};
 
 homeBtn.addEventListener('click', function () {
   view.renderHomepage();
   view.mensCatBtn(controlMensCatBtn);
   view.womensCatBtn(controlWomensCatBtn);
+  view.shoppingCartBtn(controlShoppingCartBtn);
 });
 
 // setout timer to close dropdown
 catDropdownBtnEl.addEventListener('click', function () {
-  dropdownFunction();
+  view.dropdownFunction();
   view.renderBothCategoriesPage(model.categoryData, 'All Products');
 });
 
 mensCatBtn.addEventListener('click', function () {
-  // move this to view in a render function
   view.renderCategoryPage(model.categoryData, "Men's");
 });
 
 womensCatBtn.addEventListener('click', function () {
-  // move this to view in a render function
   view.renderCategoryPage(model.categoryData, "Women's");
 });
 
@@ -44,22 +35,32 @@ const controlWomensCatBtn = function () {
   view.renderCategoryPage(model.categoryData, "Women's");
 };
 
+const controlShoppingCartBtn = function (event) {
+  // * these if Statements handles the events within the Modal *
+  if (!event.target.closest('.modalContent')) view.toggleModalWindow();
+  if (event.target === view._modalClose) view.toggleModalWindow();
+  if (event.target === view._continueShoppingBtn) view.toggleModalWindow();
+};
+
 const init = function () {
-  view.renderHomepage(model.categoryData);
+  view.renderHomepage();
+  view.renderModalWindow(model.checkoutData);
   view.mensCatBtn(controlMensCatBtn);
   view.womensCatBtn(controlWomensCatBtn);
+  view.shoppingCartBtn(controlShoppingCartBtn);
 };
 
 init();
 
-view.renderPayFastForm();
-
+// My first way of handling clicks outside of the dropdown menu to close it
 window.onclick = function (event) {
-  if (catDropdownEl.matches('.hidden')) return;
+  // console.log('target', event.target);
+  // console.log(view._cartModal);
+  if (view._catDropdownEl.matches('.hidden')) return;
   if (!event.target.matches('.categoryDropdownBtn')) {
-    catDropdownEl.classList.toggle('hidden');
+    view._catDropdownEl.classList.toggle('hidden');
     ['rounded-full', 'hover:bg-gray-200', 'bg-gray-200'].forEach(attribute =>
-      catDropdownBtnEl.classList.toggle(attribute)
+      view._catDropdownBtnEl.classList.toggle(attribute)
     );
   }
 };

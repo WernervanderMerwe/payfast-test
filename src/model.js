@@ -17,7 +17,7 @@ const params = new URLSearchParams({
 const api = async function () {
   try {
     const response = await fetch('https://sandbox.payfast.co.za/eng/process', {
-      method: 'GET',
+      method: 'POST',
       headers: {
         merchant_id: '10024906',
         merchant_key: '0elf9cy9yzqs7',
@@ -56,7 +56,7 @@ export const categoryData = [
     heading: "Men's Wear",
     category: "Men's",
     imgUrl: '/img/men hoody product yellow.jpg',
-    product: 'men hoody product yellow',
+    product: "Men's Yellow Hoody",
     cost: '600',
     alt: "Men's Hoody Product",
   },
@@ -65,7 +65,7 @@ export const categoryData = [
     heading: "Men's Wear",
     category: "Men's",
     imgUrl: '/img/men hoody product creme.jpg',
-    product: 'men hoody product creme',
+    product: "Men's Creme Hoody",
     cost: '650',
     alt: "Men's Hoody Product",
   },
@@ -74,7 +74,7 @@ export const categoryData = [
     heading: "Women's Wear",
     category: "Women's",
     imgUrl: '/img/womans hoody product black.jpg',
-    product: 'womans hoody product black',
+    product: "Women's Black Hoody",
     cost: '500',
     alt: "Women's Hoody Product",
   },
@@ -83,8 +83,19 @@ export const categoryData = [
     heading: "Women's Wear",
     category: "Women's",
     imgUrl: '/img/womans hoody product white.jpg',
-    product: 'womans hoody product white',
+    product: "Women's White Hoody",
     cost: '550',
     alt: "Women's Hoody Product",
+  },
+];
+
+export const checkoutData = [
+  {
+    itemDescription: "Men's Creme Hoody",
+    itemCost: 650,
+  },
+  {
+    itemDescription: "Women's White Hoody",
+    itemCost: 550,
   },
 ];

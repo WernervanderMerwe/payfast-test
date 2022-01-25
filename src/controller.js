@@ -5,6 +5,7 @@ const homeBtn = document.querySelector('.homeBtn');
 const catDropdownBtnEl = document.querySelector('.categoryDropdownBtn');
 const mensCatBtn = document.querySelector('.mensCatBtn');
 const womensCatBtn = document.querySelector('.womensCatBtn');
+const addToCartBtn = document.querySelector('.addToCartBtn');
 
 homeBtn.addEventListener('click', function () {
   view.renderHomepage();
@@ -16,23 +17,33 @@ homeBtn.addEventListener('click', function () {
 // setout timer to close dropdown
 catDropdownBtnEl.addEventListener('click', function () {
   view.dropdownFunction();
-  view.renderBothCategoriesPage(model.categoryData, 'All Products');
+  view.renderCategoryPage(model.categoryData, 'All Products');
+  view.addToCartBtn(controlAddToCartBtn);
 });
 
 mensCatBtn.addEventListener('click', function () {
   view.renderCategoryPage(model.categoryData, "Men's");
+  view.addToCartBtn(controlAddToCartBtn);
 });
 
 womensCatBtn.addEventListener('click', function () {
   view.renderCategoryPage(model.categoryData, "Women's");
+  view.addToCartBtn(controlAddToCartBtn);
 });
+
+// addToCartBtn?.addEventListener('click', function () {
+//   view.addToCartBtn(controlAddToCartBtn);
+//   console.log('2)+cartBtn');
+// });
 
 const controlMensCatBtn = function () {
   view.renderCategoryPage(model.categoryData, "Men's");
+  view.addToCartBtn(controlAddToCartBtn);
 };
 
 const controlWomensCatBtn = function () {
   view.renderCategoryPage(model.categoryData, "Women's");
+  view.addToCartBtn(controlAddToCartBtn);
 };
 
 const controlShoppingCartBtn = function (event) {
@@ -40,6 +51,22 @@ const controlShoppingCartBtn = function (event) {
   if (!event.target.closest('.modalContent')) view.toggleModalWindow();
   if (event.target === view._modalClose) view.toggleModalWindow();
   if (event.target === view._continueShoppingBtn) view.toggleModalWindow();
+};
+
+const controlAddToCartBtn = function (event) {
+  const obj = {
+    itemDescription:
+      event.target.closest('.productImage').dataset.itemDescription,
+    itemCost: +event.target.closest('.productImage').dataset.itemCost,
+  };
+
+  model.checkoutData.push(obj);
+  console.log(model.checkoutData);
+
+  view.clearModal();
+  view.renderModalWindow(model.checkoutData);
+  view.toggleModalWindow();
+  view.shoppingCartBtn(controlShoppingCartBtn);
 };
 
 const init = function () {
@@ -55,6 +82,7 @@ init();
 // My first way of handling clicks outside of the dropdown menu to close it
 window.onclick = function (event) {
   // console.log('target', event.target);
+  // console.log('target', event.target.closest('.productImage'));
   // console.log(view._cartModal);
   if (view._catDropdownEl.matches('.hidden')) return;
   if (!event.target.matches('.categoryDropdownBtn')) {

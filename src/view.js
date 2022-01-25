@@ -1,5 +1,3 @@
-import { checkoutData } from './model.js';
-
 class View {
   _parentElement = document.querySelector('.mainContainer');
   _modalContainer = document.querySelector('.modalContainer');
@@ -12,6 +10,9 @@ class View {
   _modalContent;
   _modalClose;
   _continueShoppingBtn;
+  _addToCartBtn;
+
+  _checkoutData = [];
 
   centerDivMarkup =
     'absolute flex left-1/2 top-1/2 -translate-x-1/2 text-white opacity-0 group-hover:opacity-100 text-center';
@@ -73,20 +74,26 @@ class View {
   }
 
   renderCategoryPage(data, category) {
-    console.log(data, category);
+    let newData = data.filter(prods => prods.category === category);
 
-    const newData = data.filter(prods => prods.category === category);
-    console.log(newData);
+    if (!newData.length) newData = data;
+
     const markup = `
       <div class="categoryPage">
+
         <div>
-          <h1 class=" text-2xl font-bold p-4">${category} Wear</h1>
+          <h1 class=" text-2xl font-bold p-4">${
+            category !== 'All Products' ? `${category} Wear` : category
+          }</h1>
           <div class=" flex h-96 gap-4 m-4">
 
             ${newData
               .map(
                 product => `
-            <div class=" flex relative group">
+            <div class="productImage flex relative group"
+            data-item-description="${product.product}" 
+            data-item-cost="${product.cost}"
+            >
               <img 
               src="${product.imgUrl}" 
               alt="${product.alt}"
@@ -96,16 +103,9 @@ class View {
                 R${product.cost}
               </p>
 
-              <form action="https://sandbox.payfast.co.za/eng/process" method="post">
-                <input type="hidden" name="merchant_id" value="10024906">
-                <input type="hidden" name="merchant_key" value="0elf9cy9yzqs7">
-                <input type="hidden" name="amount" value="${product.cost}">
-                <input type="hidden" name="item_name" value="${product.product}">
-                <input 
-                type="submit" 
-                value="Buy Now" 
-                class="${this.centerDivMarkup} translate-y-5 px-2 rounded-full bg-red-600 text-white hover:cursor-pointer">
-              </form>
+              <button class="addToCartBtn ${this.centerDivMarkup} translate-y-5 px-2 rounded-full bg-red-600 text-white">
+                Add to Cart
+              </button>
 
             </div>
             `
@@ -121,59 +121,12 @@ class View {
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
   }
 
-  renderBothCategoriesPage(data, category) {
-    // Keeping the old logic for future reference
-    // const markup = data
-    //   .map(cat => this.renderCategoryPage(cat, category))
-    //   .join('');
+  addToCartBtn(handler) {
+    this._addToCartBtnAll = document.querySelectorAll('.addToCartBtn');
 
-    const newData = data;
-
-    const markup = `
-      <div class="categoryPage">
-
-        <div>
-          <h1 class=" text-2xl font-bold p-4">${category}</h1>
-          <div class=" flex h-96 gap-4 m-4">
-
-            ${newData
-              .map(
-                product => `
-            <div class=" flex relative group">
-              <img 
-              src="${product.imgUrl}" 
-              alt="${product.alt}"
-              class=" group-hover:blur-sm group-hover:grayscale"/>
-                    
-              <p class="${this.centerDivMarkup} -translate-y-1/2">
-                ${product.category} 
-                R${product.cost}
-              </p>
-
-              <form action="https://sandbox.payfast.co.za/eng/process" method="post">
-                <input type="hidden" name="merchant_id" value="10024906">
-                <input type="hidden" name="merchant_key" value="0elf9cy9yzqs7">
-                <input type="hidden" name="amount" value="${product.cost}">
-                <input type="hidden" name="item_name" value="${product.product}">
-                <input 
-                type="submit" 
-                value="Buy Now" 
-                class="${this.centerDivMarkup} translate-y-5 px-2 rounded-full bg-red-600 text-white hover:cursor-pointer">
-              </form>
-        
-            </div>
-            `
-              )
-              .join('')}
-              
-          </div>
-        </div>
-
-      </div>
-    `;
-
-    this.clear();
-    this._parentElement.insertAdjacentHTML('afterbegin', markup);
+    this._addToCartBtnAll.forEach(prod =>
+      prod.addEventListener('click', handler)
+    );
   }
 
   toggleModalWindow() {
@@ -222,7 +175,7 @@ class View {
           </div>
 
           <div class="mt-5 grid grid-cols-3">
-            <button class="continueShoppingBtn border rounded-full bg-green-600">Continue Shopping</button>
+            <button class="continueShoppingBtn border rounded-full shadow-md bg-green-600">Continue Shopping</button>
 
             <form class="col-end-4"action="https://sandbox.payfast.co.za/eng/process" method="post">
               <input type="hidden" name="merchant_id" value="10024906">
@@ -234,7 +187,7 @@ class View {
               <input 
               type="submit" 
               value="Pay Now" 
-              class="w-full rounded-full bg-red-600 text-white hover:cursor-pointer">
+              class="w-full rounded-full shadow-md bg-red-600 text-white hover:cursor-pointer">
             </form>
 
           </div>
@@ -251,6 +204,10 @@ class View {
     this._modalContent = document.querySelector('.modalContent');
     this._modalClose = document.querySelector('.modalClose');
     this._continueShoppingBtn = document.querySelector('.continueShoppingBtn');
+  }
+
+  clearModal() {
+    this._modalContainer.innerHTML = '';
   }
 
   clear() {

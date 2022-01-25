@@ -90,12 +90,12 @@ export const categoryData = [
 ];
 
 export const checkoutData = [
-  {
-    itemDescription: "Men's Creme Hoody",
-    itemCost: 650,
-  },
-  {
-    itemDescription: "Women's White Hoody",
-    itemCost: 550,
-  },
+  // {
+  //   itemDescription: "Men's Creme Hoody",
+  //   itemCost: 650,
+  // },
+  // {
+  //   itemDescription: "Women's White Hoody",
+  //   itemCost: 550,
+  // },
 ];

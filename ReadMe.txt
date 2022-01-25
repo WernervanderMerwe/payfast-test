@@ -8,11 +8,10 @@ I used random 'E-store' Templates and added my own flair on what I think looks g
 
 Todo:
 1) Look into hashchange to split the website up into pages.
-2) Get all "buttons" to work and do something.
-
-3) Impliment cost text and a grey backgroundcolor to the products in the category page and on "hover" change the opacity respectively. *done
-
-4) Build a product page to tie in with PayFast API.
-5) Refactor the TailwindCSS code to read easier and get rid of unnecessary Tailwind code not working anymore.
-6) Make sure I follow the Do Not Repeat Yourself principle.
-7) Install Parcel, build, fix bugs and deploy to netlify.
+2) Impliment a remove item in cart function
+3) Do step 2-4 on https://developers.payfast.co.za/docs#home
+4) make a Payment success modal message when redirected from Payfast
+5) Add contact me dropdown
+6) Refactor the TailwindCSS code to read easier and get rid of unnecessary Tailwind code not working anymore.
+7) Refactor all my old logic so that it follows the same structure of the new understanding of how eventlisteners work.
+8) Install Parcel, build, fix bugs and deploy to netlify.

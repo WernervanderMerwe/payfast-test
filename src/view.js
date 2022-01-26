@@ -140,6 +140,11 @@ class View {
     // Adds global eventlistener to the whole Modal
   }
 
+  clearCart(handler) {
+    this._clearCartBtn = document.querySelector('.clearCartBtn');
+    this._clearCartBtn.addEventListener('click', handler);
+  }
+
   renderModalWindow(data) {
     let total = 0;
     const markup = `
@@ -169,9 +174,12 @@ class View {
                 `
           }
           
-          <div class=" text-2xl font-bold">
-            <span>Total:</span>
-            <span class="font-sans">R ${total}</span> 
+          <div class="grid grid-cols-3 text-2xl font-bold">
+            <div class="border">
+              <span>Total:</span>
+              <span class="font-sans">R ${total}</span> 
+            </div>
+            <button class="clearCartBtn col-end-4 bg-gray-300 border rounded-full">Clear cart</butt>
           </div>
 
           <div class="mt-5 grid grid-cols-3">

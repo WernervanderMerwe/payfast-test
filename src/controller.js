@@ -61,8 +61,17 @@ const controlAddToCartBtn = function (event) {
   };
 
   model.checkoutData.push(obj);
-  console.log(model.checkoutData);
+  // console.log(model.checkoutData);
 
+  view.clearModal();
+  view.renderModalWindow(model.checkoutData);
+  view.clearCart(controlClearCart);
+  view.toggleModalWindow();
+  view.shoppingCartBtn(controlShoppingCartBtn);
+};
+
+const controlClearCart = function (event) {
+  model.checkoutData.length = 0;
   view.clearModal();
   view.renderModalWindow(model.checkoutData);
   view.toggleModalWindow();
@@ -72,6 +81,7 @@ const controlAddToCartBtn = function (event) {
 const init = function () {
   view.renderHomepage();
   view.renderModalWindow(model.checkoutData);
+  view.clearCart(controlClearCart);
   view.mensCatBtn(controlMensCatBtn);
   view.womensCatBtn(controlWomensCatBtn);
   view.shoppingCartBtn(controlShoppingCartBtn);

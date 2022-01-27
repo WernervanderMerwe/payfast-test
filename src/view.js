@@ -1,6 +1,7 @@
 class View {
   _parentElement = document.querySelector('.mainContainer');
   _modalContainer = document.querySelector('.modalContainer');
+  _navBar = document.querySelector('.navBar');
   _catDropdownEl;
   _catDropdownBtnEl;
   _mensCatHomeBtn;
@@ -11,6 +12,7 @@ class View {
   _modalClose;
   _continueShoppingBtn;
   _addToCartBtn;
+  _removeCartItem;
 
   _checkoutData = [];
 
@@ -136,13 +138,23 @@ class View {
 
   shoppingCartBtn(handler) {
     this._cartNavBtn.addEventListener('click', handler);
-    this._cartModal.addEventListener('click', handler);
-    // Adds global eventlistener to the whole Modal
+  }
+
+  closeModalClicks(handler) {
+    this._body = document.querySelector('body');
+    this._body.addEventListener('click', handler);
   }
 
   clearCart(handler) {
     this._clearCartBtn = document.querySelector('.clearCartBtn');
     this._clearCartBtn.addEventListener('click', handler);
+  }
+
+  removeCartItem(handler) {
+    this._removeCartItem = document.querySelectorAll('.removeCartItemBtn');
+    this._removeCartItem.forEach(item =>
+      item.addEventListener('click', handler)
+    );
   }
 
   renderModalWindow(data) {
@@ -156,12 +168,13 @@ class View {
           ${
             data.length > 0
               ? data
-                  .map(prod => {
+                  .map((prod, i) => {
                     total = total + prod.itemCost;
 
                     return `        
-                      <div class="grid grid-cols-5 border-b-2 rounded-lg my-2 px-2">
-                        <div class=" text-2xl col-span-3">${prod.itemDescription}</div>
+                      <div class="modalCartItem grid grid-cols-5 border-b-2 rounded-lg my-2 px-2" data-index="${i}">
+                        <div class=" text-2xl col-span-2">${prod.itemDescription}</div>
+                        <button class="removeCartItemBtn p-2 justify-self-end font-bold text-2xl">&times</button>
                         <div class=" text-2xl col-end-6 font-sans">R ${prod.itemCost}</div>
                       </div>
                     `;
@@ -175,7 +188,7 @@ class View {
           }
           
           <div class="grid grid-cols-3 text-2xl font-bold">
-            <div class="border">
+            <div class="">
               <span>Total:</span>
               <span class="font-sans">R ${total}</span> 
             </div>

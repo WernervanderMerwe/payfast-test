@@ -5,13 +5,11 @@ const homeBtn = document.querySelector('.homeBtn');
 const catDropdownBtnEl = document.querySelector('.categoryDropdownBtn');
 const mensCatBtn = document.querySelector('.mensCatBtn');
 const womensCatBtn = document.querySelector('.womensCatBtn');
-const addToCartBtn = document.querySelector('.addToCartBtn');
 
 homeBtn.addEventListener('click', function () {
   view.renderHomepage();
   view.mensCatBtn(controlMensCatBtn);
   view.womensCatBtn(controlWomensCatBtn);
-  view.shoppingCartBtn(controlShoppingCartBtn);
 });
 
 // setout timer to close dropdown
@@ -31,11 +29,6 @@ womensCatBtn.addEventListener('click', function () {
   view.addToCartBtn(controlAddToCartBtn);
 });
 
-// addToCartBtn?.addEventListener('click', function () {
-//   view.addToCartBtn(controlAddToCartBtn);
-//   console.log('2)+cartBtn');
-// });
-
 const controlMensCatBtn = function () {
   view.renderCategoryPage(model.categoryData, "Men's");
   view.addToCartBtn(controlAddToCartBtn);
@@ -46,11 +39,27 @@ const controlWomensCatBtn = function () {
   view.addToCartBtn(controlAddToCartBtn);
 };
 
-const controlShoppingCartBtn = function (event) {
-  // * these if Statements handles the events within the Modal *
-  if (!event.target.closest('.modalContent')) view.toggleModalWindow();
-  if (event.target === view._modalClose) view.toggleModalWindow();
-  if (event.target === view._continueShoppingBtn) view.toggleModalWindow();
+const controlShoppingCartBtn = function () {
+  view.toggleModalWindow();
+};
+
+const controlModalClose = function (event) {
+  const containsHiddenClassCheck = view._cartModal.classList.contains('hidden');
+  const clickOnCartNavBtnCheck = event.target === view._cartNavBtn;
+
+  if (!containsHiddenClassCheck && !clickOnCartNavBtnCheck) {
+    if (
+      !event.target.closest('.modalContent') &&
+      event.target === view._cartModal
+    )
+      view.toggleModalWindow();
+
+    if (event.target.closest('.navBar')) view.toggleModalWindow();
+
+    if (event.target === view._modalClose) view.toggleModalWindow();
+
+    if (event.target === view._continueShoppingBtn) view.toggleModalWindow();
+  }
 };
 
 const controlAddToCartBtn = function (event) {
@@ -61,21 +70,36 @@ const controlAddToCartBtn = function (event) {
   };
 
   model.checkoutData.push(obj);
-  // console.log(model.checkoutData);
 
   view.clearModal();
   view.renderModalWindow(model.checkoutData);
   view.clearCart(controlClearCart);
   view.toggleModalWindow();
-  view.shoppingCartBtn(controlShoppingCartBtn);
+  view.removeCartItem(controlRemoveCartItemBtn);
 };
 
-const controlClearCart = function (event) {
+const controlClearCart = function () {
   model.checkoutData.length = 0;
   view.clearModal();
   view.renderModalWindow(model.checkoutData);
   view.toggleModalWindow();
-  view.shoppingCartBtn(controlShoppingCartBtn);
+};
+
+const controlRemoveCartItemBtn = function (event) {
+  const itemIndex = +event.target.closest('.modalCartItem').dataset.index;
+
+  model.checkoutData.splice(itemIndex, 1);
+
+  reRenderModal();
+};
+
+const reRenderModal = function () {
+  view.clearModal();
+  view.renderModalWindow(model.checkoutData);
+  view.toggleModalWindow();
+  view.clearCart(controlClearCart);
+  view.removeCartItem(controlRemoveCartItemBtn);
+  view.closeModalClicks(controlModalClose);
 };
 
 const init = function () {
@@ -85,6 +109,8 @@ const init = function () {
   view.mensCatBtn(controlMensCatBtn);
   view.womensCatBtn(controlWomensCatBtn);
   view.shoppingCartBtn(controlShoppingCartBtn);
+  view.removeCartItem(controlRemoveCartItemBtn);
+  view.closeModalClicks(controlModalClose);
 };
 
 init();
@@ -92,8 +118,6 @@ init();
 // My first way of handling clicks outside of the dropdown menu to close it
 window.onclick = function (event) {
   // console.log('target', event.target);
-  // console.log('target', event.target.closest('.productImage'));
-  // console.log(view._cartModal);
   if (view._catDropdownEl.matches('.hidden')) return;
   if (!event.target.matches('.categoryDropdownBtn')) {
     view._catDropdownEl.classList.toggle('hidden');

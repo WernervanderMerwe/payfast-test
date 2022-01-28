@@ -1,3 +1,6 @@
+import * as config from './config.js';
+import { fetchSignature } from './controller.js';
+
 class View {
   _parentElement = document.querySelector('.mainContainer');
   _modalContainer = document.querySelector('.modalContainer');
@@ -11,10 +14,7 @@ class View {
   _modalContent;
   _modalClose;
   _continueShoppingBtn;
-  _addToCartBtn;
   _removeCartItem;
-
-  _checkoutData = [];
 
   centerDivMarkup =
     'absolute flex left-1/2 top-1/2 -translate-x-1/2 text-white opacity-0 group-hover:opacity-100 text-center';
@@ -39,7 +39,6 @@ class View {
         <div class="flex justify-center py-10">
           <h1 class="font-bold text-2xl self-center">Shop by Men's or Women's Hoodies</h1> 
         </div>
-  
   
         <div class=" grid grid-cols-2 gap-4 mx-4">
           <div class=" mensHomeBtn relative container shadow-md hover:shadow-xl hover:translate-x-1 hover:-translate-y-1 hover:cursor-pointer duration-75">
@@ -157,54 +156,72 @@ class View {
     );
   }
 
-  renderModalWindow(data) {
+  isCartEmptyDisplay(data) {
     let total = 0;
+    let markup;
+
+    if (data.length > 0) {
+      markup = data
+        .map((prod, i) => {
+          total = total + prod.itemCost;
+
+          return `        
+            <div class="modalCartItem grid grid-cols-5 border-b-2 rounded-lg my-2 data-index="${i}">
+              <div class=" text-2xl col-span-2">${prod.itemDescription}</div>
+                <button class="removeCartItemBtn p-2 justify-self-end font-bold text-2xl">&times</button>
+              <div class=" text-2xl col-end-6 font-sans">R ${prod.itemCost}</div>
+            </div>
+          `;
+        })
+        .join('');
+    } else {
+      markup = `
+        <P>
+          No Products in Cart yet 🙁
+        </P>
+      `;
+    }
+    return { html: markup, total: total };
+  }
+
+  renderModalWindow(data) {
+    // Make if statement
+
+    const isCartEmptyDisplayObj = this.isCartEmptyDisplay(data);
+
+    const signature = fetchSignature({
+      amount: isCartEmptyDisplayObj.total,
+      item_name: `${data.length} Products`,
+    });
+
     const markup = `
       <div class=" cartModal fixed hidden pt-28 w-full max-w-6xl h-full bg-black bg-opacity-40 overflow-auto">
         <div class=" modalContent bg-gray-100 m-auto border-2 border-blue-500 p-5 w-9/12 rounded-lg">
           <span class="modalClose float-right font-bold text-2xl text-center hover:cursor-pointer">&times</span>
           <h1 class=" font-bold text-3xl">Shopping Cart</h1>
           
-          ${
-            data.length > 0
-              ? data
-                  .map((prod, i) => {
-                    total = total + prod.itemCost;
 
-                    return `        
-                      <div class="modalCartItem grid grid-cols-5 border-b-2 rounded-lg my-2 px-2" data-index="${i}">
-                        <div class=" text-2xl col-span-2">${prod.itemDescription}</div>
-                        <button class="removeCartItemBtn p-2 justify-self-end font-bold text-2xl">&times</button>
-                        <div class=" text-2xl col-end-6 font-sans">R ${prod.itemCost}</div>
-                      </div>
-                    `;
-                  })
-                  .join('')
-              : `
-                  <P>
-                    No Products in Cart yet 🙁
-                  </P>
-                `
-          }
+            ${isCartEmptyDisplayObj.html}
+
           
           <div class="grid grid-cols-3 text-2xl font-bold">
             <div class="">
               <span>Total:</span>
-              <span class="font-sans">R ${total}</span> 
+              <span class="font-sans">R ${isCartEmptyDisplayObj.total}</span> 
             </div>
-            <button class="clearCartBtn col-end-4 bg-gray-300 border rounded-full">Clear cart</butt>
+            <button class="clearCartBtn col-end-4 bg-gray-300 border rounded-full">Clear cart</button>
           </div>
 
           <div class="mt-5 grid grid-cols-3">
             <button class="continueShoppingBtn border rounded-full shadow-md bg-green-600">Continue Shopping</button>
 
-            <form class="col-end-4"action="https://sandbox.payfast.co.za/eng/process" method="post">
-              <input type="hidden" name="merchant_id" value="10024906">
-              <input type="hidden" name="merchant_key" value="0elf9cy9yzqs7">
-              <input type="hidden" name="amount" value="${total}">
-              <input type="hidden" name="item_name" value="${
-                data.length
-              } Products">
+            <form class="formSubmit col-end-4"action="https://sandbox.payfast.co.za/eng/process" method="post">
+              <input type="hidden" name="merchant_id" value="${config.merchant_id}">
+              <input type="hidden" name="merchant_key" value="${config.merchant_key}">
+              <input type="hidden" name="return_url" value="${config.returnUrl}">
+              <input type="hidden" name="amount" value="${isCartEmptyDisplayObj.total}">
+              <input type="hidden" name="item_name" value="${data.length} Products">
+              <input type="hidden" name="signature" value="${signature}">
               <input 
               type="submit" 
               value="Pay Now" 
@@ -213,9 +230,10 @@ class View {
 
           </div>
 
-        </div>
       </div>
     `;
+
+    console.log(signature);
 
     this._modalContainer.insertAdjacentHTML('afterbegin', markup);
 
@@ -225,6 +243,11 @@ class View {
     this._modalContent = document.querySelector('.modalContent');
     this._modalClose = document.querySelector('.modalClose');
     this._continueShoppingBtn = document.querySelector('.continueShoppingBtn');
+  }
+
+  formSubmitBtn(handler) {
+    this._formSubmit = document.querySelector('.formSubmit');
+    this._formSubmit.addEventListener('submit', handler);
   }
 
   clearModal() {

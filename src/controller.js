@@ -93,6 +93,16 @@ const controlRemoveCartItemBtn = function (event) {
   reRenderModal();
 };
 
+export const fetchSignature = function (data) {
+  const signature = model.generateSignature(data);
+  return signature;
+};
+
+const controlFormSubmitHandler = function (event) {
+  // view.formSubmitBtn(controlFormSubmitHandler);
+  // event.preventDefault();
+};
+
 const reRenderModal = function () {
   view.clearModal();
   view.renderModalWindow(model.checkoutData);
@@ -100,6 +110,8 @@ const reRenderModal = function () {
   view.clearCart(controlClearCart);
   view.removeCartItem(controlRemoveCartItemBtn);
   view.closeModalClicks(controlModalClose);
+  // view.formSubmitBtn(controlFormSubmitHandler);
+  // fetchSignature();
 };
 
 const init = function () {

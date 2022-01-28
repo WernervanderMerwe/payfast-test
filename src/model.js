@@ -1,3 +1,19 @@
+import * as config from './config.js';
+
+export const generateSignature = function (data) {
+  let urlPayload =
+    `merchant_id=${config.merchant_id}` +
+    `&merchant_key=${config.merchant_key}` +
+    `&return_url=${encodeURIComponent(config.returnUrl)}` +
+    `&amount=${data.amount}` +
+    `&item_name=${data.item_name.split(' ').join('+')}` +
+    `&passphrase=${config.passphrase}`;
+  console.log(urlPayload);
+  let signature = md5(urlPayload);
+  console.log(signature);
+  return signature;
+};
+
 // Keeping this to see if I cant get it to work through the fetch api in the future
 const api = async function () {
   try {

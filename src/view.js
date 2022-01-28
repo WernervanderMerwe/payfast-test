@@ -185,8 +185,6 @@ class View {
   }
 
   renderModalWindow(data) {
-    // Make if statement
-
     const isCartEmptyDisplayObj = this.isCartEmptyDisplay(data);
 
     const signature = fetchSignature({
@@ -243,11 +241,6 @@ class View {
     this._modalContent = document.querySelector('.modalContent');
     this._modalClose = document.querySelector('.modalClose');
     this._continueShoppingBtn = document.querySelector('.continueShoppingBtn');
-  }
-
-  formSubmitBtn(handler) {
-    this._formSubmit = document.querySelector('.formSubmit');
-    this._formSubmit.addEventListener('submit', handler);
   }
 
   clearModal() {

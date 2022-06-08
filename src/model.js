@@ -8,9 +8,9 @@ export const generateSignature = function (data) {
     `&amount=${data.amount}` +
     `&item_name=${data.item_name.split(' ').join('+')}` +
     `&passphrase=${config.passphrase}`;
-  console.log(urlPayload);
+  // console.log(urlPayload);
   let signature = md5(urlPayload);
-  console.log(signature);
+  // console.log(signature);
   return signature;
 };
 
@@ -80,6 +80,7 @@ export const categoryData = [
 ];
 
 export const checkoutData = [
+  // example of how it looks populated
   // {
   //   itemDescription: "Men's Creme Hoody",
   //   itemCost: 650,

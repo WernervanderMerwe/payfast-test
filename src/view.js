@@ -231,7 +231,7 @@ class View {
       </div>
     `;
 
-    console.log(signature);
+    // console.log(signature);
 
     this._modalContainer.insertAdjacentHTML('afterbegin', markup);
 

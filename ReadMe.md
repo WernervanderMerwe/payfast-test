@@ -2,7 +2,7 @@
 
 [https://payfast-test-mvc-ecommerce.netlify.app](https://payfast-test-mvc-ecommerce.netlify.app)
 
-My first website built in the MVC design pattern.
+## My first website built in the MVC design pattern.
 
 I'm using https://github.com/WernervanderMerwe/The-Complete-Javascript-Course/tree/main/18-forkify/starter/src/js as a base to reference back to but it has proved way harder than I initially anticipated to try and recreate the MVC design using the website im building exposing quite a few weaknesses regarding understanding the "this" keyword, inheritance, OOP in general, functions calling functions on calling functions.
 
